@@ -1,0 +1,27 @@
+export default function Masthead({
+  current,
+  meta,
+}: {
+  current: "latest" | "archive";
+  meta?: string;
+}) {
+  return (
+    <header className="masthead">
+      <div>
+        <h1>Swing Screener</h1>
+        {meta && <div className="meta">{meta}</div>}
+      </div>
+      <nav className="tabs">
+        <a href="/" aria-current={current === "latest" ? "page" : undefined}>
+          Latest
+        </a>
+        <a
+          href="/archive"
+          aria-current={current === "archive" ? "page" : undefined}
+        >
+          Archive
+        </a>
+      </nav>
+    </header>
+  );
+}

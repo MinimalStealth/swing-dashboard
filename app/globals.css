@@ -1,0 +1,585 @@
+/* Palette: validated categorical slots 1-2, a single-hue ordinal ramp for
+   setup state, and the reserved status tokens. Light values on :root, dark
+   values declared under both the OS media query and the [data-theme] scope
+   so an explicit toggle wins in either direction. */
+
+:root {
+  color-scheme: light;
+
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+
+  --series-1: #2a78d6; /* 1-month performance */
+  --series-2: #eb6834; /* 1-week performance */
+
+  /* Ordinal ramp: how close a setup is to an actual entry trigger. */
+  --setup-trending: #86b6ef;
+  --setup-tight: #3987e5;
+  --setup-breakout: #1c5cab;
+  --setup-extended: #898781;
+
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+  --success-text: #006300;
+
+  --radius: 10px;
+  --mark-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+
+    --series-1: #3987e5;
+    --series-2: #d95926;
+
+    --setup-trending: #6da7ec;
+    --setup-tight: #2a78d6;
+    --setup-breakout: #184f95;
+    --setup-extended: #898781;
+
+    --success-text: #0ca30c;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+
+  --series-1: #3987e5;
+  --series-2: #d95926;
+
+  --setup-trending: #6da7ec;
+  --setup-tight: #2a78d6;
+  --setup-breakout: #184f95;
+  --setup-extended: #898781;
+
+  --success-text: #0ca30c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 20px 72px;
+}
+
+/* ---------- masthead ---------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin-bottom: 20px;
+}
+
+.masthead h1 {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.masthead .meta {
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+nav.tabs {
+  display: flex;
+  gap: 4px;
+}
+
+nav.tabs a {
+  padding: 5px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 13px;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+
+nav.tabs a[aria-current="page"] {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-primary);
+  font-weight: 550;
+}
+
+/* ---------- cards ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+
+.card > h2 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 0 0 4px;
+}
+
+.card > .card-note {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  margin: 0 0 16px;
+}
+
+/* ---------- regime banner ---------- */
+
+.regime {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+  align-items: flex-start;
+}
+
+.regime-verdict {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.dot-good {
+  background: var(--good);
+}
+.dot-warning {
+  background: var(--warning);
+}
+.dot-critical {
+  background: var(--critical);
+}
+
+.regime-line {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-top: 2px;
+  max-width: 62ch;
+}
+
+.index-grid {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.index-block .sym {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.index-block .px {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.index-block .emas {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- callouts ---------- */
+
+.callouts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.callout {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.callout .label {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.callout .value {
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+
+.callout .sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ---------- tables ---------- */
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 0 -20px;
+  padding: 0 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+thead th {
+  text-align: right;
+  font-weight: 550;
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 10px 8px;
+  border-bottom: 1px solid var(--grid);
+}
+
+thead th:first-child,
+td:first-child {
+  text-align: left;
+  padding-left: 0;
+}
+
+tbody td {
+  text-align: right;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--grid);
+  color: var(--text-secondary);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+td.ticker {
+  font-weight: 650;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-variant-numeric: normal;
+}
+
+td.sector {
+  color: var(--text-muted);
+  font-size: 12px;
+  white-space: normal;
+  min-width: 130px;
+  text-align: left;
+}
+
+/* ---------- setup chip ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px 2px 7px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 550;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--chip-color) 16%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--chip-color) 40%, transparent);
+  white-space: nowrap;
+  font-variant-numeric: normal;
+}
+
+.chip .dot {
+  width: 7px;
+  height: 7px;
+  background: var(--chip-color);
+}
+
+.chip-breakout {
+  --chip-color: var(--setup-breakout);
+}
+.chip-tight {
+  --chip-color: var(--setup-tight);
+}
+.chip-trending {
+  --chip-color: var(--setup-trending);
+}
+.chip-extended {
+  --chip-color: var(--setup-extended);
+}
+
+.flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 550;
+}
+
+.flag-warning {
+  color: var(--text-primary);
+}
+
+.flag-warning .dot {
+  background: var(--warning);
+}
+
+/* ---------- risk bar ---------- */
+
+.riskbar {
+  display: block;
+  width: 96px;
+  height: 14px;
+  margin-left: auto;
+}
+
+/* ---------- sector chart ---------- */
+
+.legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legend .key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend .swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex: none;
+}
+
+.sector-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 168px) 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.sector-name {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.sector-plot {
+  position: relative;
+  height: 22px;
+}
+
+.sector-zero {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--axis);
+}
+
+.sector-bar {
+  position: absolute;
+  height: 8px;
+}
+
+.sector-values {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  min-width: 96px;
+  text-align: right;
+}
+
+@media (max-width: 620px) {
+  .sector-row {
+    grid-template-columns: 1fr auto;
+  }
+  .sector-plot {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- persistence timeline ---------- */
+
+.timeline {
+  display: flex;
+  gap: 2px;
+  justify-content: flex-end;
+}
+
+.cell {
+  width: 26px;
+  height: 20px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  font-variant-numeric: normal;
+}
+
+.cell-empty {
+  background: transparent;
+  border: 1px solid var(--grid);
+  color: var(--text-muted);
+}
+
+.cell-breakout {
+  background: var(--setup-breakout);
+}
+.cell-tight {
+  background: var(--setup-tight);
+}
+.cell-trending {
+  background: var(--setup-trending);
+  color: #0b0b0b;
+}
+.cell-extended {
+  background: var(--setup-extended);
+}
+
+.delta-up {
+  color: var(--success-text);
+}
+.delta-down {
+  color: var(--critical);
+}
+
+/* ---------- filter row ---------- */
+
+.filters {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.filters .filter-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+
+.filters a {
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-decoration: none;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.filters a[aria-current="true"] {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ---------- misc ---------- */
+
+.empty {
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 8px 0 4px;
+}
+
+.footnote {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: 76ch;
+  margin-top: 26px;
+}
+
+details.tableview {
+  margin-top: 14px;
+}
+
+details.tableview summary {
+  cursor: pointer;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 620px) {
+  .callout .value {
+    font-size: 22px;
+  }
+  .regime-verdict {
+    font-size: 19px;
+  }
+}
