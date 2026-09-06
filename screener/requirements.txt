@@ -1,0 +1,6 @@
+# Swing screener dependencies — versions verified working on 2026-09-06.
+# Install: pip install -r requirements.txt
+tradingview-screener>=3.2.1,<4
+yfinance>=1.7.0,<2
+pandas>=2.2,<3
+numpy>=1.26,<3
