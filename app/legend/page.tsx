@@ -105,20 +105,21 @@ export default function LegendPage() {
           <dt>Stop</dt>
           <dd>The strategy&rsquo;s stop-loss level: the low of the current day.</dd>
 
-          <dt>Risk</dt>
-          <dd>
-            Percent distance from the entry down to the stop — how much
-            you&rsquo;re risking per share if the trade fails immediately.
-          </dd>
-
-          <dt>Plan</dt>
+          <dt>Risk / Reward</dt>
           <dd>
             A single bar visualizing the trade end to end: the red segment is
             the distance from stop to entry (what you risk), the blue segment
             is the runway from entry up to the 3&times;ATR trim level (where
             the strategy takes profit), and the vertical mark shows where
-            price sits right now relative to both. Hover it to see the exact
-            stop, entry, trim, and current price.
+            price sits right now relative to both — hover the bar for the
+            exact stop, entry, trim and current price. Underneath it, the red
+            percentage is how much you&rsquo;re risking per share to the
+            stop, the green percentage is the potential gain per share to the
+            trim level, and the pill (e.g. &ldquo;1 : 1.5&rdquo;) is that
+            reward divided by that risk — how many dollars of upside the plan
+            offers for every dollar risked. Higher is better; anything below
+            roughly 1 : 1 means the downside is bigger than the upside if the
+            trade goes exactly to plan.
           </dd>
 
           <dt>Earnings</dt>

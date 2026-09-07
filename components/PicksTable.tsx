@@ -5,6 +5,22 @@ import RiskBar from "./RiskBar";
 
 const ACTIONABLE_SETUPS = new Set(["BREAKING OUT", "TIGHT / SETTING UP"]);
 
+function rewardPct(p: Pick): number {
+  return ((p.extension_trim_level - p.entry_trigger) / p.entry_trigger) * 100;
+}
+
+function riskReward(p: Pick): string {
+  const reward = rewardPct(p);
+  if (!p.risk_pct || p.risk_pct <= 0) return "—";
+  return `1 : ${(reward / p.risk_pct).toFixed(1)}`;
+}
+
+function scoreClass(score: number): string {
+  if (score >= 80) return "score-high";
+  if (score >= 60) return "score-mid";
+  return "score-low";
+}
+
 export default function PicksTable({
   picks,
   emptyMessage,
@@ -32,8 +48,7 @@ export default function PicksTable({
               <th scope="col">From high</th>
               <th scope="col">Entry</th>
               <th scope="col">Stop</th>
-              <th scope="col">Risk</th>
-              <th scope="col">Plan</th>
+              <th scope="col">Risk / Reward</th>
               <th scope="col">Earnings</th>
               <th scope="col">Score</th>
             </tr>
@@ -41,6 +56,7 @@ export default function PicksTable({
           <tbody>
             {picks.map((p) => {
               const actionable = ACTIONABLE_SETUPS.has(p.setup);
+              const reward = rewardPct(p);
               return (
                 <tr key={p.ticker}>
                   <td className="ticker">
@@ -78,14 +94,23 @@ export default function PicksTable({
                   <td>{fmtPct(p.dist_from_52w_high_pct)}</td>
                   <td>{fmtPrice(p.entry_trigger)}</td>
                   <td>{fmtPrice(p.stop)}</td>
-                  <td>{fmtPct(p.risk_pct)}</td>
-                  <td>
+                  <td className="rr-cell">
                     <RiskBar
                       stop={p.stop}
                       entry={p.entry_trigger}
                       trim={p.extension_trim_level}
                       price={p.price}
                     />
+                    <div className="rr-caption">
+                      <span className="rr-risk">−{p.risk_pct.toFixed(1)}%</span>
+                      <span className="rr-sep" aria-hidden="true">
+                        ·
+                      </span>
+                      <span className="rr-reward">+{reward.toFixed(1)}%</span>
+                      <span className="rr-ratio" title="Reward-to-risk ratio: potential gain to the trim level per unit of risk to the stop">
+                        {riskReward(p)}
+                      </span>
+                    </div>
                   </td>
                   <td>
                     {p.days_to_earnings === null ? (
@@ -100,7 +125,9 @@ export default function PicksTable({
                       `${p.days_to_earnings}d`
                     )}
                   </td>
-                  <td>{p.score.toFixed(1)}</td>
+                  <td>
+                    <span className={`score-badge ${scoreClass(p.score)}`}>{p.score.toFixed(1)}</span>
+                  </td>
                 </tr>
               );
             })}
