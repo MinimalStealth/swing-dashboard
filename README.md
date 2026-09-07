@@ -4,6 +4,7 @@ A Next.js dashboard for `swing_screener.py`. The screener keeps doing the
 scraping wherever it already runs; this site only stores and displays what it
 publishes.
 
+
 - **`/`** — the latest run: market regime, callouts, the three pick tables, sector strength.
 - **`/archive`** — the last 7/14/30 runs rolled up **by ticker**: how many days each
   name has appeared, its current streak, how its setup and score moved.
