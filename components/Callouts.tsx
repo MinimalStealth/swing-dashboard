@@ -1,11 +1,5 @@
 import type { Pick, Run } from "@/lib/types";
 
-/**
- * The things you'd otherwise have to work out by scanning sixteen columns:
- * whether anything is actually actionable today, whether the published picks
- * are really one bet wearing three tickers, and whether an earnings date is
- * sitting inside the hold.
- */
 export default function Callouts({ run }: { run: Run }) {
   const published = dedupe([
     ...run.top_overall,
@@ -32,19 +26,19 @@ export default function Callouts({ run }: { run: Run }) {
   return (
     <div className="callouts">
       <div className="callout">
-        <div className="label">Actionable now</div>
+        <div className="label">⚡ Actionable now</div>
         <div className="value">{actionable.length}</div>
         <div className="sub">
           {actionable.length === 0
-            ? "Nothing triggering — everything published is still just trending."
+            ? "Nothing triggering — everything published is still just trending. See ⚡ in the tables below."
             : `${breakingOut.length} breaking out, ${
                 actionable.length - breakingOut.length
-              } tight and near the pivot.`}
+              } tight and near the pivot — marked ⚡ in the tables below.`}
         </div>
       </div>
 
       <div className="callout">
-        <div className="label">Published picks</div>
+        <div className="label">📋 Published picks</div>
         <div className="value">{published.length}</div>
         <div className="sub">
           {run.ranked_n} of {run.screened_n} screened names cleared the 8 EMA check.
@@ -54,7 +48,7 @@ export default function Callouts({ run }: { run: Run }) {
       <div className="callout">
         <div className="label">
           {concentrated && <span className="dot dot-warning" aria-hidden="true" />}
-          Sector concentration
+          🧭 Sector concentration
         </div>
         <div className="value">
           {topSectorCount}/{published.length}
@@ -71,7 +65,7 @@ export default function Callouts({ run }: { run: Run }) {
           {earnings.length > 0 && (
             <span className="dot dot-warning" aria-hidden="true" />
           )}
-          Earnings inside the hold
+          📅 Earnings inside the hold
         </div>
         <div className="value">{earnings.length}</div>
         <div className="sub">

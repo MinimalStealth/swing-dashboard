@@ -583,3 +583,54 @@ details.tableview summary {
     font-size: 19px;
   }
 }
+
+/* ---------- legend page ---------- */
+
+.glossary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px 16px;
+  margin-top: 4px;
+}
+
+.glossary-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.glossary-item .emoji {
+  flex: none;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.glossary-item strong {
+  color: var(--text-primary);
+}
+
+dl.deflist {
+  margin: 0;
+}
+
+dl.deflist dt {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 14px;
+}
+
+dl.deflist dt:first-child {
+  margin-top: 0;
+}
+
+dl.deflist dd {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  max-width: 70ch;
+}

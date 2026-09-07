@@ -6,8 +6,6 @@ import Callouts from "@/components/Callouts";
 import PicksTable from "@/components/PicksTable";
 import SectorChart from "@/components/SectorChart";
 
-// Re-read at most once a minute. The screener publishes once a day, so this
-// is fresh in practice while keeping blob reads off every request.
 export const revalidate = 60;
 
 export default async function LatestPage() {
@@ -113,6 +111,8 @@ export default async function LatestPage() {
       </section>
 
       <p className="footnote">
+        Full definitions and the sector/setup emoji key live on the{" "}
+        <a href="/legend">Legend</a> tab.{" "}
         <strong>Setup</strong> — BRK: closed above the 20-day pivot on volume
         confirmation. TGT: tight and within 8% of the pivot; set an alert at the
         entry. TRN: healthy trend, no trigger yet. EXT: past the 3&times;ATR

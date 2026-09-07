@@ -49,3 +49,41 @@ export function setupClass(setup: string): string {
       return "trending";
   }
 }
+
+const SECTOR_EMOJI: Record<string, string> = {
+  "Commercial Services": "🧾",
+  Communications: "📡",
+  "Consumer Durables": "🚗",
+  "Consumer Non-Durables": "🧴",
+  "Consumer Services": "🛎️",
+  "Distribution Services": "📦",
+  "Electronic Technology": "🔌",
+  "Energy Minerals": "🛢️",
+  Finance: "💰",
+  "Health Services": "⚕️",
+  "Health Technology": "🧬",
+  "Industrial Services": "🏗️",
+  Miscellaneous: "🔷",
+  "Non-Energy Minerals": "⛏️",
+  "Process Industries": "🏭",
+  "Producer Manufacturing": "⚙️",
+  "Retail Trade": "🛍️",
+  "Technology Services": "💻",
+  Transportation: "🚚",
+  Utilities: "⚡",
+};
+
+export function sectorEmoji(sector: string): string {
+  return SECTOR_EMOJI[sector] ?? "📊";
+}
+
+const SETUP_EMOJI: Record<string, string> = {
+  "BREAKING OUT": "🚀",
+  "TIGHT / SETTING UP": "🎯",
+  TRENDING: "📈",
+  EXTENDED: "⚠️",
+};
+
+export function setupEmoji(setup: string): string {
+  return SETUP_EMOJI[setup] ?? "▪️";
+}

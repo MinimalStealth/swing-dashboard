@@ -1,13 +1,10 @@
 import type { Pick } from "@/lib/types";
-import { fmtCap, fmtPct, fmtPrice, setupClass } from "@/lib/format";
+import { fmtCap, fmtPct, fmtPrice, sectorEmoji, setupClass, setupEmoji } from "@/lib/format";
 import { SETUP_ABBREV } from "@/lib/persistence";
 import RiskBar from "./RiskBar";
 
-/**
- * The compact table carries what you decide from. Everything the screener
- * computed is still reachable in the "All metrics" table below it, so no
- * value lives only in a tooltip.
- */
+const ACTIONABLE_SETUPS = new Set(["BREAKING OUT", "TIGHT / SETTING UP"]);
+
 export default function PicksTable({
   picks,
   emptyMessage,
@@ -42,47 +39,71 @@ export default function PicksTable({
             </tr>
           </thead>
           <tbody>
-            {picks.map((p) => (
-              <tr key={p.ticker}>
-                <td className="ticker">{p.ticker}</td>
-                <td className="sector">{p.sector}</td>
-                <td>
-                  <span className={`chip chip-${setupClass(p.setup)}`} title={p.setup}>
-                    <span className="dot" aria-hidden="true" />
-                    {SETUP_ABBREV[p.setup] ?? p.setup}
-                  </span>
-                </td>
-                <td>{fmtPrice(p.price)}</td>
-                <td>{fmtCap(p.market_cap)}</td>
-                <td>{fmtPct(p.perf_1m_pct)}</td>
-                <td>{p.rel_volume.toFixed(2)}x</td>
-                <td>{fmtPct(p.dist_from_52w_high_pct)}</td>
-                <td>{fmtPrice(p.entry_trigger)}</td>
-                <td>{fmtPrice(p.stop)}</td>
-                <td>{fmtPct(p.risk_pct)}</td>
-                <td>
-                  <RiskBar
-                    stop={p.stop}
-                    entry={p.entry_trigger}
-                    trim={p.extension_trim_level}
-                    price={p.price}
-                  />
-                </td>
-                <td>
-                  {p.days_to_earnings === null ? (
-                    <span title="No earnings date published — unknown, not safe">?</span>
-                  ) : p.earnings_risk ? (
-                    <span className="flag flag-warning">
+            {picks.map((p) => {
+              const actionable = ACTIONABLE_SETUPS.has(p.setup);
+              return (
+                <tr key={p.ticker}>
+                  <td className="ticker">
+                    {p.ticker}
+                    {actionable && (
+                      <span
+                        aria-hidden="true"
+                        title="Actionable now — breaking out or tight and near the pivot"
+                      >
+                        {" "}
+                        ⚡
+                      </span>
+                    )}
+                    {p.score >= 85 && (
+                      <span aria-hidden="true" title="Score 85+">
+                        {" "}
+                        🔥
+                      </span>
+                    )}
+                  </td>
+                  <td className="sector">
+                    <span aria-hidden="true">{sectorEmoji(p.sector)}</span> {p.sector}
+                  </td>
+                  <td>
+                    <span className={`chip chip-${setupClass(p.setup)}`} title={p.setup}>
                       <span className="dot" aria-hidden="true" />
-                      {p.days_to_earnings}d
+                      <span aria-hidden="true">{setupEmoji(p.setup)}</span>
+                      {SETUP_ABBREV[p.setup] ?? p.setup}
                     </span>
-                  ) : (
-                    `${p.days_to_earnings}d`
-                  )}
-                </td>
-                <td>{p.score.toFixed(1)}</td>
-              </tr>
-            ))}
+                  </td>
+                  <td>{fmtPrice(p.price)}</td>
+                  <td>{fmtCap(p.market_cap)}</td>
+                  <td>{fmtPct(p.perf_1m_pct)}</td>
+                  <td>{p.rel_volume.toFixed(2)}x</td>
+                  <td>{fmtPct(p.dist_from_52w_high_pct)}</td>
+                  <td>{fmtPrice(p.entry_trigger)}</td>
+                  <td>{fmtPrice(p.stop)}</td>
+                  <td>{fmtPct(p.risk_pct)}</td>
+                  <td>
+                    <RiskBar
+                      stop={p.stop}
+                      entry={p.entry_trigger}
+                      trim={p.extension_trim_level}
+                      price={p.price}
+                    />
+                  </td>
+                  <td>
+                    {p.days_to_earnings === null ? (
+                      <span title="No earnings date published — unknown, not safe">❓</span>
+                    ) : p.earnings_risk ? (
+                      <span className="flag flag-warning">
+                        <span className="dot" aria-hidden="true" />
+                        <span aria-hidden="true">📅</span>
+                        {p.days_to_earnings}d
+                      </span>
+                    ) : (
+                      `${p.days_to_earnings}d`
+                    )}
+                  </td>
+                  <td>{p.score.toFixed(1)}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

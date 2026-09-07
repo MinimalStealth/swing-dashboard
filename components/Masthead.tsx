@@ -2,7 +2,7 @@ export default function Masthead({
   current,
   meta,
 }: {
-  current: "latest" | "archive";
+  current: "latest" | "archive" | "legend";
   meta?: string;
 }) {
   return (
@@ -15,11 +15,17 @@ export default function Masthead({
         <a href="/" aria-current={current === "latest" ? "page" : undefined}>
           Latest
         </a>
-        <a
+        
           href="/archive"
           aria-current={current === "archive" ? "page" : undefined}
         >
           Archive
+        </a>
+        
+          href="/legend"
+          aria-current={current === "legend" ? "page" : undefined}
+        >
+          Legend
         </a>
       </nav>
     </header>
